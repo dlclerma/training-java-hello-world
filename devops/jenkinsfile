@@ -52,9 +52,21 @@ pipeline {
   }
 
   post {
-    always {
+    always  {
         sh 'docker logout'
         archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+
+    }
+    success {
+      script{
+        if (env.BRANCH_NAME == 'master') {
+        // send mail
+        } else if (env.BRANCH_NAME.startsWith('PR')) {
+          // also send email to tell people their PR status
+        } else {
+          // this is some other branch
+        } 
+      }
     }
   }
 }
