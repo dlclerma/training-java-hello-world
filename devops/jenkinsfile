@@ -1,14 +1,11 @@
 #!groovy
 
-@Library('functions')_
-
-
 pipeline {
 	agent none
 
   environment {
 		DOCKERHUB_CREDENTIALS=credentials('dockerhub-cred-adrianscalian')
-    TAG_NAME=getLastGitTag()
+    TAG_NAME=env.TAG_NAME
 	}
 
 
