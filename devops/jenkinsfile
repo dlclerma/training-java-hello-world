@@ -4,7 +4,7 @@
 
 
 pipeline {
-	agent none
+	agent any
 
   environment {
 		DOCKERHUB_CREDENTIALS=credentials('dockerhub-cred-adrianscalian')
@@ -27,14 +27,12 @@ pipeline {
 
 
     stage('Docker Build') {
-    	agent any
       steps {
       	sh 'docker build -t scalian_training/java-app -f devops/Dockerfile .'
       }
     }
 
     stage('Docker Login') {
-    	agent any
       steps {
       	sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
       }
@@ -42,7 +40,6 @@ pipeline {
 
 
     stage('Docker Push') {
-    	agent any
       steps {
       	sh 'docker tag scalian_training/java-app adrianscalian/scalian_training_java-app:$TAG_NAME'
         sh 'docker push adrianscalian/scalian_training_java-app:$TAG_NAME'
