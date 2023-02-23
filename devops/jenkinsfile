@@ -21,7 +21,7 @@ pipeline {
     stage('Docker Build') {
     	agent any
       steps {
-      	sh 'docker build -t scalian_training/java-app:1.0-SNAPSHOT -f devops/Dockerfile .'
+      	sh 'docker build -t scalian_training/java-app -f devops/Dockerfile .'
       }
     }
 
@@ -36,8 +36,17 @@ pipeline {
     stage('Docker Push') {
     	agent any
       steps {
-      	sh 'docker tag scalian_training/java-app:1.0-SNAPSHOT adrianscalian/scalian_training_java-app:1.0-SNAPSHOT'
-        sh 'docker push adrianscalian/scalian_training_java-app:1.0-SNAPSHOT'
+      	sh 'docker tag scalian_training/java-app adrianscalian/scalian_training_java-app:$TAG_NAME'
+        sh 'docker push adrianscalian/scalian_training_java-app:$TAG_NAME'
+      }
+    }
+
+    stage('Docker Publish') {
+    	when {
+        tag 'release-*'
+      }
+      steps {
+      	echo "Deploying $TAG_NAME"
       }
     }
   }
@@ -45,7 +54,7 @@ pipeline {
   post {
     always {
         sh 'docker logout'
-        archiveArtifacts artifacts: 'tmp/*.jar', fingerprint: true
+        archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
     }
   }
 }
