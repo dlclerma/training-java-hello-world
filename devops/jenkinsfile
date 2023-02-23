@@ -25,16 +25,6 @@ pipeline {
       }
     }
 
-  	stage('Maven Install') {
-    	agent {
-      	docker {
-        	image 'maven:3.8.6-openjdk-11-slim'
-        }
-      }
-      steps {
-      	sh 'mvn clean install'
-      }
-    }
 
     stage('Docker Build') {
     	agent any
