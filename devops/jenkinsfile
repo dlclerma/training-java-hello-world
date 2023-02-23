@@ -1,12 +1,30 @@
 #!groovy
+
+@Library('functions')_
+
+
 pipeline {
 	agent none
 
   environment {
 		DOCKERHUB_CREDENTIALS=credentials('dockerhub-cred-adrianscalian')
+    TAG_NAME=getLastGitTag()
 	}
 
+
   stages {
+
+    stage('Maven Install') {
+    	agent {
+      	docker {
+        	image 'maven:3.8.6-openjdk-11-slim'
+        }
+      }
+      steps {
+      	sh 'mvn clean install'
+      }
+    }
+
   	stage('Maven Install') {
     	agent {
       	docker {
