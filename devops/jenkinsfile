@@ -4,7 +4,7 @@
 
 
 pipeline {
-	agent any
+	agent any // Default Agent
 
   environment {
 		DOCKERHUB_CREDENTIALS=credentials('dockerhub-cred-adrianscalian')
@@ -15,6 +15,7 @@ pipeline {
   stages {
 
     stage('Maven Install') {
+      // Specifies where the entire Pipeline, or a specific stage, will execute in the Jenkins environment depending on where the agent section is placed
     	agent {
       	docker {
         	image 'maven:3.8.6-openjdk-11-slim'
@@ -32,15 +33,22 @@ pipeline {
       }
     }
 
-    stage('Docker Login') {
+
+
+    stage('Testing') {
       steps {
-      	sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+      	sh 'docker run -d --rm -p 40084:8080  --name java-app   scalian_training/java-app'
+        int status = sh(script: "curl -sLI -w '%{http_code}' localhost:40084/hello -o /dev/null", returnStdout: true)
+        if (status != 200 && status != 201) {
+            error("Testing ERROR. Returned status code = $status when calling $url")
+        }
       }
     }
 
 
     stage('Docker Push') {
       steps {
+        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
       	sh 'docker tag scalian_training/java-app adrianscalian/scalian_training_java-app:$TAG_NAME'
         sh 'docker push adrianscalian/scalian_training_java-app:$TAG_NAME'
       }
