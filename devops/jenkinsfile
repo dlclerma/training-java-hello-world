@@ -46,7 +46,7 @@ pipeline {
       }
     }
 
-    stage('Docker Publish') {
+    stage('Deploy') {
     	when {
         tag 'release-*'
       }
@@ -63,14 +63,7 @@ pipeline {
 
     }
     success {
-      script{
-        if (env.BRANCH_NAME == 'master') {
         // send mail
-        } else if (env.BRANCH_NAME.startsWith('PR')) {
-          // also send email to tell people their PR status
-        } else {
-          // this is some other branch
-        } 
       }
     }
   }
