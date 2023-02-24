@@ -59,14 +59,15 @@ pipeline {
   post {
     always  {
         sh 'docker logout'
-        archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+        archiveArtifacts artifacts: 'target/*.jar'
 
     }
     success {
-        // send mail
-      }
+      // send mail
+      echo "SUCCESS"
     }
   }
+  
 }
 
 
