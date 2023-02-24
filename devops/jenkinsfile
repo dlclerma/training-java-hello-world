@@ -37,10 +37,13 @@ pipeline {
 
     stage('Testing') {
       steps {
-      	sh 'docker run -d --rm -p 40084:8080  --name java-app   scalian_training/java-app'
-        int status = sh(script: "curl -sLI -w '%{http_code}' localhost:40084/hello -o /dev/null", returnStdout: true)
-        if (status != 200 && status != 201) {
-            error("Testing ERROR. Returned status code = $status when calling $url")
+        // Block of scripted pipeline
+        script {
+          sh 'docker run -d --rm -p 40084:8080  --name java-app   scalian_training/java-app'
+          def status = sh(script: "curl -sLI -w '%{http_code}' localhost:40084/hello -o /dev/null", returnStdout: true)
+          if (status != 200 && status != 201) {
+              error("Testing ERROR. Returned status code = $status when calling $url")
+          }
         }
       }
     }
