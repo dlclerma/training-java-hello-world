@@ -29,7 +29,7 @@ pipeline {
 
     stage('Docker Build') {
       steps {
-        sh 'do -sh ./target/*.jar'
+        sh 'du -sh ./target/*.jar'
       	sh 'docker build -t scalian_training/java-app -f devops/Dockerfile  --build-arg VERSION-1.0.2-SNAPSHOT .'
       }
     }
