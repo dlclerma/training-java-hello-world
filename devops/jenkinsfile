@@ -7,8 +7,8 @@ pipeline {
 	agent any // Default Agent
 
   environment {
-		DOCKERHUB_CREDENTIALS=credentials('dockerhub-cred-adrianscalian')
-    TAG_NAME=getLastGitTag()
+		//DOCKERHUB_CREDENTIALS=credentials('dockerhub-cred-adrianscalian')
+    //TAG_NAME=getLastGitTag()
 	}
 
 
@@ -29,13 +29,13 @@ pipeline {
 
     stage('Docker Build') {
       steps {
-      	sh 'docker build -t scalian_training/java-app -f devops/Dockerfile .'
+      	sh 'docker build -t scalian_training/java-app -f devops/Dockerfile  --build-arg VERSION-1.0.2-SNAPSHOT .'
       }
     }
 
 
 
-    stage('Testing') {
+    /*stage('Testing') {
       steps {
         // Block of scripted pipeline
         script {
@@ -64,15 +64,15 @@ pipeline {
       steps {
       	echo "Deploying $TAG_NAME"
       }
-    }
+    }*/
   }
 
   post {
-    //always  {
+    always  {
         //sh 'docker logout'
-        //archiveArtifacts artifacts: 'target/*.jar'
+        archiveArtifacts artifacts: 'target/*.jar'
 
-    //}
+    }
     success {
       // send mail
       echo "SUCCESS"
