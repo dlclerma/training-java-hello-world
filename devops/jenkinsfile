@@ -34,7 +34,7 @@ pipeline {
         }
       }
       steps {
-        //sh 'echo "SONAR HOME: ${env.SONARQUBE_HOST}"'
+        sh 'echo "SONAR HOME: ${env.SONARQUBE_HOST}"'
         sh 'mvn verify sonar:sonar -Dsonar.projectKey=java-example-jenkins -Dsonar.host.url="${env.SONARQUBE_HOST_LOCAL}" -Dsonar.login=sqa_c51f8c11cf1a1c755ee60d84a015a83956e2aa60'
       }
     }
