@@ -6,10 +6,10 @@
 pipeline {
 	agent any // Default Agent
 
-  /*environment {
-		//DOCKERHUB_CREDENTIALS=credentials('dockerhub-cred-adrianscalian')
+  environment {
+		DOCKERHUB_CREDENTIALS=credentials('dockerhub')
     // TAG_NAME=getLastGitTag()
-	}*/
+	}
 
 
   stages {
@@ -47,18 +47,18 @@ pipeline {
           }
         }
       }
-    }
+    }*/
 
 
     stage('Docker Push') {
       steps {
         sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-      	sh 'docker tag scalian_training/java-app adrianscalian/scalian_training_java-app:$TAG_NAME'
-        sh 'docker push adrianscalian/scalian_training_java-app:$TAG_NAME'
+      	sh 'docker tag scalian_training/java-app adrianscalian/scalian_training_java-app:prueba-jenkins'
+        sh 'docker push adrianscalian/scalian_training_java-app:prueba-jenkins'
       }
     }
 
-    stage('Deploy') {
+    /*stage('Deploy') {
     	when {
         tag 'release-*'
       }
@@ -70,13 +70,14 @@ pipeline {
 
   post {
     always  {
-        //sh 'docker logout'
-        archiveArtifacts artifacts: 'target/*.jar'
+        sh 'docker logout'
+        
 
     }
     success {
       // send mail
       echo "SUCCESS"
+      archiveArtifacts artifacts: 'target/*.jar'
     }
   }
   
