@@ -53,8 +53,8 @@ pipeline {
     stage('Docker Push') {
       steps {
         sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-      	sh 'docker tag scalian_training/java-app adrianscalian/scalian_training_java-app:prueba-jenkins'
-        sh 'docker push adrianscalian/scalian_training_java-app:prueba-jenkins'
+      	sh 'docker tag scalian_training/java-app davidlc91/scalian_training_java-app:prueba-jenkins'
+        sh 'docker push davidlc91/scalian_training_java-app:prueba-jenkins'
       }
     }
 
